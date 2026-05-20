@@ -130,11 +130,6 @@ class GeschichteMotivation(Slide):
         self.play(DrawBorderThenFill(ctr_box), Write(ctr_title))
         self.play(LaggedStart(*[FadeIn(layer, shift=UP*0.2) for layer in reversed(ctr_stack)], lag_ratio=0.2))
         self.play(FadeIn(ctr_text, shift=UP*0.2))
-        
-        # Das Problem der VM (Guest OS) hervorheben
-        guest_os = vm_stack[2]
-        self.play(Indicate(guest_os, color=CTRL_RED, scale_factor=1.05))
-        self.play(Indicate(ctr_group, color=NODE_GREEN, scale_factor=1.05))
         self.next_slide()
 
         self.play(

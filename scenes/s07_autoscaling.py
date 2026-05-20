@@ -116,7 +116,7 @@ class Autoscaling(Slide):
         self.play(FadeIn(small_g, shift=UP*0.2))
         self.next_slide()
 
-        analyze_text = Text("OOMKilled! Adjusting Limits...", font_size=16, color=CTRL_RED, weight=BOLD).next_to(vpa, RIGHT, buff=0.4)
+        analyze_text = Text("OOMKilled!", font_size=16, color=CTRL_RED, weight=BOLD).next_to(vpa, RIGHT, buff=0.4)
         vpa_arrow = create_uniform_arrow(vpa.get_bottom(), small_g.get_top(), color=STORE_YELLOW)
 
         self.play(FadeIn(analyze_text, shift=LEFT*0.2), GrowArrow(vpa_arrow))

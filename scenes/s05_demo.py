@@ -1,9 +1,9 @@
 from manim import *
 from manim_slides import Slide
 from style import (
-    TITLE_SIZE, SECTION_SIZE, BODY_SIZE, SMALL_SIZE,
+    TEXT_INVERTED, TITLE_SIZE, BODY_SIZE,
     K8S_BLUE, NODE_GREEN, STORE_YELLOW, CTRL_RED,
-    TEXT_LIGHT, TEXT_MUTED, BOX_GRAY, BG_BOX_OPACITY,
+    TEXT_LIGHT, TEXT_MUTED, TEXT_INVERTED_MUTED, BG_BOX_OPACITY,
     GIT_ORANGE, TERMINAL_BG, TERMINAL_BAR
 )
 from helpers import create_modern_box, create_uniform_arrow
@@ -55,7 +55,7 @@ class DemoDeployment(Slide):
         dot_y = Circle(radius=0.06, color="#FFBD2E", fill_color="#FFBD2E", fill_opacity=1)
         dot_g = Circle(radius=0.06, color="#27C93F", fill_color="#27C93F", fill_opacity=1)
         dots = VGroup(dot_r, dot_y, dot_g).arrange(RIGHT, buff=0.1).move_to(term_bar.get_center()).align_to(term_bar, LEFT).shift(RIGHT * 0.2)
-        term_title_text = Text("deploy-demo ~ zsh", font_size=13, color=TEXT_MUTED).move_to(term_bar.get_center())
+        term_title_text = Text("deploy-demo ~ zsh", font_size=13, color=TEXT_INVERTED_MUTED).move_to(term_bar.get_center())
         
         terminal_ui = VGroup(term_frame, term_bar, term_bar_bottom, dots, term_title_text)
 
@@ -68,17 +68,15 @@ class DemoDeployment(Slide):
         # ==========================================
         
         # 1. Show YAML
-        pg_code = Code(code_file="kubernetes/cnpg-cluster-simple.yaml", language="yaml", background="window").scale(0.75).move_to(LEFT * 2.6 + DOWN * 0.6)
+        pg_code = Code(code_file="kubernetes/cnpg-cluster-simple.yaml", language="yaml", background="window").scale(0.8).center()
         try: pg_code[0][0].set_fill(opacity=0.95)
         except: pass
-        pg_code_title = Text("pg-cluster.yaml", font_size=14, color=TEXT_LIGHT, font="Monospace", weight=BOLD).next_to(pg_code, UP, buff=0.1)
-        pg_code_group = VGroup(pg_code_title, pg_code)
 
-        self.play(FadeIn(pg_code_group, shift=UP*0.2))
+        self.play(FadeIn(pg_code, shift=UP*0.2))
         self.next_slide()
 
         # Commit to Git
-        self.play(pg_code_group.animate.scale(0.1).move_to(git_box.get_center()).set_opacity(0), run_time=0.8)
+        self.play(pg_code.animate.scale(0.1).move_to(git_box.get_center()).set_opacity(0), run_time=0.8)
 
         # Terminal Variables
         t_start = term_frame.get_corner(UL) + RIGHT * 0.2 + DOWN * 0.6
@@ -111,10 +109,10 @@ class DemoDeployment(Slide):
         arrow_op_pg = create_uniform_arrow(op_box.get_bottom(), pg_boundary.get_top())
         self.play(GrowArrow(arrow_op_pg))
 
-        l5 = Text("NAME           READY  STATUS", font_size=t_font, color=TEXT_LIGHT, font="Monospace").next_to(l4, DOWN, buff=0.1).align_to(l1, LEFT)
-        l6_pend = Text("pg-0           0/1    Pending", font_size=t_font, color=TEXT_MUTED, font="Monospace").next_to(l5, DOWN, buff=0.1).align_to(l1, LEFT)
-        l7_pend = Text("pg-1           0/1    Pending", font_size=t_font, color=TEXT_MUTED, font="Monospace").next_to(l6_pend, DOWN, buff=0.1).align_to(l1, LEFT)
-        l8_pend = Text("pg-2           0/1    Pending", font_size=t_font, color=TEXT_MUTED, font="Monospace").next_to(l7_pend, DOWN, buff=0.1).align_to(l1, LEFT)
+        l5 = Text("NAME           READY  STATUS", font_size=t_font, color=TEXT_INVERTED, font="Monospace").next_to(l4, DOWN, buff=0.1).align_to(l1, LEFT)
+        l6_pend = Text("pg-0           0/1    Pending", font_size=t_font, color=TEXT_INVERTED_MUTED, font="Monospace").next_to(l5, DOWN, buff=0.1).align_to(l1, LEFT)
+        l7_pend = Text("pg-1           0/1    Pending", font_size=t_font, color=TEXT_INVERTED_MUTED, font="Monospace").next_to(l6_pend, DOWN, buff=0.1).align_to(l1, LEFT)
+        l8_pend = Text("pg-2           0/1    Pending", font_size=t_font, color=TEXT_INVERTED_MUTED, font="Monospace").next_to(l7_pend, DOWN, buff=0.1).align_to(l1, LEFT)
 
         p1 = create_modern_box("pg-0", width=1.6, height=0.4, color=NODE_GREEN, font_size=12)
         p2 = create_modern_box("pg-1", width=1.6, height=0.4, color=NODE_GREEN, font_size=12)
@@ -144,18 +142,22 @@ class DemoDeployment(Slide):
         term_content_p1 = VGroup(l1, l2, l3, l4, l5, l6_pend, l7_pend, l8_pend)
         self.play(FadeOut(term_content_p1))
         
-        # Show Web YAML
-        web_code = Code(code_file="kubernetes/web-app.yaml", language="yaml", background="window").scale(0.75).move_to(LEFT * 2.6 + DOWN * 0.6)
-        try: web_code[0][0].set_fill(opacity=0.95)
+        # Show Web YAMLs (one at a time)
+        web_deploy_code = Code(code_file="kubernetes/web-deploy.yaml", language="yaml", background="window").scale(0.8).center()
+        try: web_deploy_code[0][0].set_fill(opacity=0.95)
         except: pass
-        web_code_title = Text("web-app.yaml", font_size=14, color=TEXT_LIGHT, font="Monospace", weight=BOLD).next_to(web_code, UP, buff=0.1)
-        web_code_group = VGroup(web_code_title, web_code)
+        web_svc_code = Code(code_file="kubernetes/web-svc.yaml", language="yaml", background="window").scale(0.8).center()
+        try: web_svc_code[0][0].set_fill(opacity=0.95)
+        except: pass
 
-        self.play(FadeIn(web_code_group, shift=UP*0.2))
+        self.play(FadeIn(web_deploy_code, shift=UP*0.2))
         self.next_slide()
 
-        # Commit to Git
-        self.play(web_code_group.animate.scale(0.1).move_to(git_box.get_center()).set_opacity(0), run_time=0.8)
+        self.play(FadeOut(web_deploy_code), FadeIn(web_svc_code, shift=UP*0.2))
+        self.next_slide()
+
+        # Commit both to Git
+        self.play(FadeOut(web_svc_code), run_time=0.8)
 
         # Git Push -> Argo -> API
         t1 = Text("$ git push origin main", font_size=t_font, color=STORE_YELLOW, font="Monospace").move_to(t_start, aligned_edge=UL)
@@ -176,9 +178,9 @@ class DemoDeployment(Slide):
         arrow_api_lb = create_uniform_arrow(api_box.get_bottom(), lb_box.get_top())
         self.play(GrowArrow(arrow_api_web), GrowArrow(arrow_api_lb))
 
-        t4 = Text("NAME           READY  STATUS", font_size=t_font, color=TEXT_LIGHT, font="Monospace").next_to(t3, DOWN, buff=0.1).align_to(t1, LEFT)
-        t5_pend = Text("web-0          0/1    Pending", font_size=t_font, color=TEXT_MUTED, font="Monospace").next_to(t4, DOWN, buff=0.1).align_to(t1, LEFT)
-        t6_pend = Text("web-1          0/1    Pending", font_size=t_font, color=TEXT_MUTED, font="Monospace").next_to(t5_pend, DOWN, buff=0.1).align_to(t1, LEFT)
+        t4 = Text("NAME           READY  STATUS", font_size=t_font, color=TEXT_INVERTED, font="Monospace").next_to(t3, DOWN, buff=0.1).align_to(t1, LEFT)
+        t5_pend = Text("web-0          0/1    Pending", font_size=t_font, color=TEXT_INVERTED_MUTED, font="Monospace").next_to(t4, DOWN, buff=0.1).align_to(t1, LEFT)
+        t6_pend = Text("web-1          0/1    Pending", font_size=t_font, color=TEXT_INVERTED_MUTED, font="Monospace").next_to(t5_pend, DOWN, buff=0.1).align_to(t1, LEFT)
 
         w1 = create_modern_box("web-0", width=1.4, height=0.4, color=K8S_BLUE, font_size=12)
         w2 = create_modern_box("web-1", width=1.4, height=0.4, color=K8S_BLUE, font_size=12)
@@ -205,11 +207,11 @@ class DemoDeployment(Slide):
         self.next_slide()
 
         # LoadBalancer IP Assignment
-        t7 = Text("$ kubectl get svc web-lb -w", font_size=t_font, color=STORE_YELLOW, font="Monospace").next_to(t6_pend, DOWN, buff=0.3).align_to(t1, LEFT)
+        t7 = Text("$ kubectl get svc -n web web-lb -w", font_size=t_font, color=STORE_YELLOW, font="Monospace").next_to(t6_pend, DOWN, buff=0.3).align_to(t1, LEFT)
         self.play(AddTextLetterByLetter(t7, run_time=0.6))
         
-        t8 = Text("NAME      TYPE           EXTERNAL-IP   PORT(S)", font_size=t_font, color=TEXT_LIGHT, font="Monospace").next_to(t7, DOWN, buff=0.1).align_to(t1, LEFT)
-        t9_pend = Text("web-lb    LoadBalancer   <pending>     80:31200/TCP", font_size=t_font, color=TEXT_MUTED, font="Monospace").next_to(t8, DOWN, buff=0.1).align_to(t1, LEFT)
+        t8 = Text("NAME      TYPE           EXTERNAL-IP   PORT(S)", font_size=t_font, color=TEXT_INVERTED, font="Monospace").next_to(t7, DOWN, buff=0.1).align_to(t1, LEFT)
+        t9_pend = Text("web-lb    LoadBalancer   <pending>     80:31200/TCP", font_size=t_font, color=TEXT_INVERTED_MUTED, font="Monospace").next_to(t8, DOWN, buff=0.1).align_to(t1, LEFT)
         
         self.play(FadeIn(t8), FadeIn(t9_pend))
         self.next_slide()

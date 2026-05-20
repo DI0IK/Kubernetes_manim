@@ -1,5 +1,7 @@
 from manim import *
 from style import TEXT_LIGHT, TEXT_MUTED
+import numpy as np
+import qrcode
 
 BG_BOX_OPACITY = 0.25
 
@@ -17,13 +19,15 @@ def create_modern_box(text, width=2.5, height=1.0, color=WHITE, font_size=18, st
     return VGroup(rect, label)
 
 def create_uniform_arrow(start, end, color=TEXT_MUTED):
-    return Arrow(
-        start, end, 
-        color=color, 
-        buff=0.1, 
-        stroke_width=2.5, 
-        max_tip_length_to_length_ratio=0.15
-    ).set_z_index(-1)
+    arrow = Arrow(
+        start, end,
+        color=color,
+        buff=0.1,
+        stroke_width=2.5,
+        tip_length=0.25,
+        tip_width=0.25,
+    )
+    return arrow.set_z_index(-1)
 
 def create_provider_card(title, subtitle, color):
     card_bg = RoundedRectangle(
@@ -38,3 +42,8 @@ def create_provider_card(title, subtitle, color):
     t_main = Text(title, font_size=28, color=TEXT_LIGHT, weight=BOLD).move_to(card_bg.get_center() + UP * 0.3)
     t_sub = Text(subtitle, font_size=16, color=color, weight=BOLD).move_to(card_bg.get_center() + DOWN * 0.4)
     return VGroup(card_bg, t_main, t_sub)
+
+def create_qr_code(url, scale=1.5):
+    import numpy as np
+    img = qrcode.make(url).convert("RGBA")
+    return ImageMobject(np.array(img)).scale(scale)

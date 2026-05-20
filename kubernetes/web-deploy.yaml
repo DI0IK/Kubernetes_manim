@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  namespace: web
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: nginx
+          image: my-app:latest
+          env:
+            - name: DB_HOST
+              value: "pg-cluster-rw.database.svc.cluster.local"

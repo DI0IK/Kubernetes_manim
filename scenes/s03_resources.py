@@ -44,9 +44,55 @@ class StandardResources(Slide):
         self.play(FadeIn(cluster, shift=RIGHT*0.2))
         self.next_slide()
         self.play(FadeOut(flow_group))
-        
+
         # ==========================================
-        # SLIDE 3: Standard Resource: Pod (Visual + Code)
+        # SLIDE 3: Namespaces
+        # ==========================================
+        t_ns = Text("Namespaces", font_size=SECTION_SIZE, color=TEXT_LIGHT).to_edge(UP, buff=0.4)
+        self.play(Transform(title, t_ns))
+
+        ns_default = RoundedRectangle(width=3.0, height=3.0, corner_radius=0.2, color=BOX_GRAY, stroke_width=2, fill_opacity=0.05).shift(LEFT * 3.8 + DOWN * 0.4)
+        ns_db = RoundedRectangle(width=3.0, height=3.0, corner_radius=0.2, color=K8S_BLUE, stroke_width=2, fill_opacity=0.05).shift(DOWN * 0.4)
+        ns_web = RoundedRectangle(width=3.0, height=3.0, corner_radius=0.2, color=NODE_GREEN, stroke_width=2, fill_opacity=0.05).shift(RIGHT * 3.8 + DOWN * 0.4)
+
+        l_default = Text("default", font_size=20, color=BOX_GRAY, weight=BOLD).next_to(ns_default, UP, buff=0.2).align_to(ns_default, LEFT)
+        l_db = Text("database", font_size=20, color=K8S_BLUE, weight=BOLD).next_to(ns_db, UP, buff=0.2).align_to(ns_db, LEFT)
+        l_web = Text("web", font_size=20, color=NODE_GREEN, weight=BOLD).next_to(ns_web, UP, buff=0.2).align_to(ns_web, LEFT)
+
+        r_default = VGroup(
+            create_modern_box("Pod: my-pod", width=2.4, height=0.6, color=NODE_GREEN, font_size=13),
+            create_modern_box("Svc: my-app-svc", width=2.4, height=0.6, color=STORE_YELLOW, font_size=13),
+        ).arrange(DOWN, buff=0.2).move_to(ns_default.get_center())
+
+        r_db = VGroup(
+            create_modern_box("Cluster: pg-cluster", width=2.4, height=0.6, color=CTRL_RED, font_size=13),
+        ).move_to(ns_db.get_center())
+
+        r_web = VGroup(
+            create_modern_box("Deploy: web-app", width=2.4, height=0.6, color=NODE_GREEN, font_size=13),
+            create_modern_box("Svc: web-lb", width=2.4, height=0.6, color=STORE_YELLOW, font_size=13),
+        ).arrange(DOWN, buff=0.2).move_to(ns_web.get_center())
+
+        self.play(
+            LaggedStart(
+                AnimationGroup(DrawBorderThenFill(ns_default), Write(l_default), FadeIn(r_default, shift=UP*0.2)),
+                AnimationGroup(DrawBorderThenFill(ns_db), Write(l_db), FadeIn(r_db, shift=UP*0.2)),
+                AnimationGroup(DrawBorderThenFill(ns_web), Write(l_web), FadeIn(r_web, shift=UP*0.2)),
+                lag_ratio=0.25
+            )
+        )
+
+        ns_note = Text("Virtuelle Cluster zur Isolation & Organisation", font_size=18, color=TEXT_MUTED).next_to(ns_db, DOWN, buff=0.4)
+        self.play(FadeIn(ns_note, shift=UP*0.2))
+        self.next_slide()
+
+        self.play(FadeOut(ns_default), FadeOut(ns_db), FadeOut(ns_web),
+                  FadeOut(l_default), FadeOut(l_db), FadeOut(l_web),
+                  FadeOut(r_default), FadeOut(r_db), FadeOut(r_web),
+                  FadeOut(ns_note))
+
+        # ==========================================
+        # SLIDE 4: Standard Resource: Pod (Visual + Code)
         # ==========================================
         t3 = Text("Standard Resource: Pod", font_size=SECTION_SIZE, color=TEXT_LIGHT).to_edge(UP, buff=0.4)
         self.play(Transform(title, t3))
@@ -59,9 +105,8 @@ class StandardResources(Slide):
         c2_group = create_modern_box("Container B", width=2.8, height=0.8, color=STORE_YELLOW, font_size=16)
 
         containers = VGroup(c1_group, c2_group).arrange(DOWN, buff=0.2).move_to(boundary.get_center())
-        ip_label = Text("IP: 10.0.0.1", font_size=14, color=TEXT_MUTED, weight=BOLD).next_to(boundary, DOWN, buff=0.2)
         
-        pod_visual = VGroup(boundary, pod_label, containers, ip_label).shift(LEFT * 3 + DOWN*0.2)
+        pod_visual = VGroup(boundary, pod_label, containers).shift(LEFT * 3 + DOWN*0.2)
 
         # CODE (Right)
         pod_code = Code(code_file="kubernetes/pod.yaml", language="yaml", background="window").scale(0.75).shift(RIGHT * 3 + DOWN*0.2)
@@ -69,7 +114,6 @@ class StandardResources(Slide):
         # Purposeful animation: Boundary -> Contents -> IP -> Code
         self.play(FadeIn(boundary), Write(pod_label))
         self.play(FadeIn(c1_group, shift=UP*0.1), FadeIn(c2_group, shift=UP*0.1))
-        self.play(FadeIn(ip_label))
         self.play(FadeIn(pod_code, shift=LEFT*0.2))
         self.next_slide()
 
@@ -142,7 +186,46 @@ class StandardResources(Slide):
         self.play(FadeOut(svc_visual), FadeOut(svc_code))
 
         # ==========================================
-        # SLIDE 6: CRDs
+        # SLIDE 7: Internal DNS & Service Discovery
+        # ==========================================
+        t_dns = Text("Internal DNS & Service Discovery", font_size=SECTION_SIZE, color=TEXT_LIGHT).to_edge(UP, buff=0.4)
+        self.play(Transform(title, t_dns))
+
+        dns_name = MarkupText(
+            f'<span fgcolor="{NODE_GREEN}" weight="bold">my-svc</span>'
+            f'<span fgcolor="{TEXT_MUTED}">.</span>'
+            f'<span fgcolor="{K8S_BLUE}" weight="bold">my-ns</span>'
+            f'<span fgcolor="{TEXT_MUTED}">.</span>'
+            f'<span fgcolor="{STORE_YELLOW}" weight="bold">svc</span>'
+            f'<span fgcolor="{TEXT_MUTED}">.cluster.local</span>',
+            font_size=26
+        ).move_to(UP * 1.8)
+
+        self.play(FadeIn(dns_name, shift=DOWN*0.2))
+        self.next_slide()
+
+        pod_dns = create_modern_box("Pod", width=2.0, height=1.0, color=NODE_GREEN).shift(LEFT * 4.5 + DOWN * 1.0)
+        coredns = create_modern_box("CoreDNS", width=2.0, height=1.0, color=K8S_BLUE).shift(DOWN * 1.0)
+        svc_dns = create_modern_box("Service\n(my-svc)", width=2.0, height=1.0, color=STORE_YELLOW).shift(RIGHT * 4.5 + DOWN * 1.0)
+
+        arrow1_dns = Arrow(pod_dns.get_right(), coredns.get_left(), color=TEXT_MUTED, buff=0.1)
+        arrow2_dns = Arrow(coredns.get_right(), svc_dns.get_left(), color=TEXT_MUTED, buff=0.1)
+        label1_dns = Text("DNS Query", font_size=14, color=TEXT_MUTED, weight=BOLD).next_to(arrow1_dns, UP, buff=0.1)
+        label2_dns = Text("Cluster IP", font_size=14, color=TEXT_MUTED, weight=BOLD).next_to(arrow2_dns, UP, buff=0.1)
+
+        self.play(FadeIn(pod_dns, shift=RIGHT*0.3), FadeIn(svc_dns, shift=LEFT*0.3))
+        self.play(FadeIn(coredns, shift=UP*0.3))
+        self.play(GrowArrow(arrow1_dns), FadeIn(label1_dns))
+        self.play(GrowArrow(arrow2_dns), FadeIn(label2_dns))
+        self.next_slide()
+
+        self.play(FadeOut(dns_name),
+                  FadeOut(pod_dns), FadeOut(coredns), FadeOut(svc_dns),
+                  FadeOut(arrow1_dns), FadeOut(arrow2_dns),
+                  FadeOut(label1_dns), FadeOut(label2_dns))
+
+        # ==========================================
+        # SLIDE 8: CRDs
         # ==========================================
         t6 = Text("Custom Resource Definitions (CRDs)", font_size=SECTION_SIZE, color=TEXT_LIGHT).to_edge(UP, buff=0.4)
         self.play(Transform(title, t6))
@@ -175,7 +258,7 @@ class StandardResources(Slide):
         self.play(FadeOut(puzzle_group))
         
         # ==========================================
-        # SLIDE 7: CRD Beispiel
+        # SLIDE 9: CRD Beispiel
         # ==========================================
         t7 = Text("Beispiel: CloudNativePG", font_size=SECTION_SIZE, color=TEXT_LIGHT).to_edge(UP, buff=0.4)
         self.play(Transform(title, t7))
@@ -186,14 +269,41 @@ class StandardResources(Slide):
         self.next_slide()
 
         # ==========================================
-        # SLIDE 8: Fazit
+        # SLIDE 10: Weitere wichtige Resources
+        # ==========================================
+        self.play(FadeOut(cnpg_code))
+        t_more = Text("Weitere wichtige Resources", font_size=SECTION_SIZE, color=TEXT_LIGHT).to_edge(UP, buff=0.4)
+        self.play(Transform(title, t_more))
+
+        cards_data = [
+            ("ConfigMap / Secret", "Konfiguration & Secrets\nentkoppelt vom Pod-Image", STORE_YELLOW),
+            ("Ingress", "L7 Routing per Host/Path\nzu internen Services", K8S_BLUE),
+            ("PersistentVolumeClaim", "Persistenten Speicher\nper StorageClass anfordern", NODE_GREEN),
+            ("DaemonSet", "Ein Pod pro Node\n(Logging, Monitoring, CNI)", BOX_GRAY),
+            ("StatefulSet", "Stabile Pod-Namen\n& persistent Storage", CTRL_RED),
+            ("NetworkPolicy", "Firewall-Regeln\nzwischen Pods", STORE_YELLOW),
+        ]
+
+        cards = VGroup()
+        for i, (title_text, desc, color) in enumerate(cards_data):
+            x = -3.0 if i % 2 == 0 else 3.0
+            y = 2 if i < 2 else (0.0 if i < 4 else -2)
+            card = RoundedRectangle(width=5.6, height=1.6, corner_radius=0.2, color=color, stroke_width=2, fill_color=color, fill_opacity=0.04)
+            card.shift(RIGHT * x + DOWN * y)
+            t_card = Text(title_text, font_size=18, color=TEXT_LIGHT, weight=BOLD).move_to(card.get_center() + UP * 0.3)
+            d_card = Text(desc, font_size=13, color=TEXT_MUTED, line_spacing=1.3).move_to(card.get_center() + DOWN * 0.4)
+            cards.add(VGroup(card, t_card, d_card))
+
+        self.play(LaggedStart(*[FadeIn(g, shift=UP*0.3) for g in cards], lag_ratio=0.15))
+        self.next_slide()
+
+        self.play(FadeOut(cards))
+
+        # ==========================================
+        # SLIDE 11: Fazit
         # ==========================================
         outro = Text("CRDs machen Kubernetes grenzenlos erweiterbar", font_size=BODY_SIZE + 2, color=NODE_GREEN, weight=BOLD)
         
-        fade_out_group = VGroup(cnpg_code)
-        if 'highlight_rect' in locals():
-            fade_out_group.add(highlight_rect)
-            
-        self.play(FadeOut(fade_out_group), Transform(title, outro))
+        self.play(Transform(title, outro))
         self.play(title.animate.center().scale(1.1))
         self.next_slide()

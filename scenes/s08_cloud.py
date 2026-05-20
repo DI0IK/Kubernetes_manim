@@ -5,7 +5,7 @@ from style import (
     K8S_BLUE, NODE_GREEN, STORE_YELLOW, CTRL_RED,
     TEXT_LIGHT, TEXT_MUTED, BOX_GRAY, BG_BOX_OPACITY
 )
-from helpers import create_modern_box, create_uniform_arrow, create_provider_card
+from helpers import create_modern_box, create_uniform_arrow, create_provider_card, create_qr_code
 
 
 class CloudHosting(Slide):
@@ -142,8 +142,11 @@ class CloudHosting(Slide):
             
         final = Text("Vielen Dank!", font_size=TITLE_SIZE, color=TEXT_LIGHT, weight=BOLD)
         final_q = Text("Fragen?", font_size=BODY_SIZE, color=TEXT_MUTED).next_to(final, DOWN, buff=0.4)
+        qr = create_qr_code("https://di0ik.github.io/Kubernetes_manim/links.html", scale=1.5)
+        qr_label = Text("K8s Resources", font_size=14, color=TEXT_MUTED, weight=BOLD).next_to(qr, DOWN, buff=0.1)
+        qr_group = VGroup(qr, qr_label).to_edge(DOWN_RIGHT, buff=0.5)
         
         # Merge slide title smoothly into standard middle screen
-        self.play(Transform(title, final), FadeIn(final_q, shift=UP*0.2))
+        self.play(Transform(title, final), FadeIn(final_q, shift=UP*0.2), FadeIn(qr_group, shift=UP*0.2))
         self.play(title.animate.center().scale(1.1))
         self.next_slide()

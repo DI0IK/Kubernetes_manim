@@ -149,7 +149,6 @@ class ClusterArchitektur(Slide):
         bus_line2 = DashedLine(bus_pt2, bus_pt1, color=K8S_BLUE, stroke_opacity=0.7)
         up_pod1 = DashedLine(bus_pt1, pod1.get_bottom(), color=K8S_BLUE, stroke_opacity=0.7).add_tip()
 
-        proxy_label = Text("Traffic Routing", font_size=14, color=K8S_BLUE).next_to(proxy_drop, RIGHT, buff=0.2)
 
         self.play(FadeIn(rack), Write(rack_title))
         self.play(FadeIn(kubelet, shift=UP*0.3), FadeIn(proxy, shift=UP*0.3))
@@ -168,8 +167,7 @@ class ClusterArchitektur(Slide):
         )
         self.next_slide()
 
-        # Network routing visual animation
-        self.play(Create(proxy_drop), Write(proxy_label))
+        self.play(Create(proxy_drop))
         self.play(
             Create(bus_line1), Create(up_pod2),
             Create(bus_line2), Create(up_pod1),

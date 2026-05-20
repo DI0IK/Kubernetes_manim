@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K8s Resources – Kubernetes Presentation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1a1d23;
+      color: #F8F9FA;
+      line-height: 1.6;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    /* Header */
+    .header {
+      margin-bottom: 2.5rem;
+      border-bottom: 3px solid #0B78D0;
+      padding-bottom: 1rem;
+    }
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #F8F9FA;
+      letter-spacing: -0.5px;
+    }
+    .header .subtitle {
+      color: #6C757D;
+      font-size: 1rem;
+      margin-top: 0.3rem;
+    }
+
+    /* Section */
+    .section { margin-bottom: 2rem; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .section-header .bar {
+      width: 4px;
+      height: 1.4rem;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #F8F9FA;
+      letter-spacing: -0.2px;
+    }
+
+    /* Card Grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 0.5rem;
+    }
+    .cards a {
+      display: flex;
+      flex-direction: column;
+      padding: 0.7rem 0.9rem;
+      background: #212529;
+      border-radius: 8px;
+      color: #F8F9FA;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid #2b3036;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .cards a:hover {
+      background: #2b3036;
+      border-color: #0B78D0;
+      transform: translateX(2px);
+    }
+    .cards a small {
+      font-weight: 400;
+      color: #6C757D;
+      font-size: 0.78rem;
+      margin-top: 0.15rem;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid #2b3036;
+      text-align: center;
+      color: #6C757D;
+      font-size: 0.85rem;
+    }
+    footer a { color: #0B78D0; text-decoration: none; }
+
+    @media (max-width: 700px) {
+      .cards { grid-template-columns: 1fr; }
+      .header h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>K8s Resources</h1>
+    <p class="subtitle">Links zu allen Technologien &amp; Tools aus der Präsentation</p>
+  </div>
+
+  <!-- Kubernetes Offiziell -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#0B78D0;"></div>
+      <h2>Kubernetes Offiziell</h2>
+    </div>
+    <div class="cards">
+      <a href="https://kubernetes.io">Kubernetes <small>Offizielle Dokumentation</small></a>
+      <a href="https://github.com/kubernetes/kubernetes">Kubernetes (GitHub) <small>Source Code &amp; Releases</small></a>
+      <a href="https://kubernetes.io/docs/concepts/overview/components/">Kubernetes Komponenten <small>API Server, Scheduler, Controller Manager, etc.</small></a>
+      <a href="https://kubernetes.io/docs/reference/kubectl/">kubectl <small>CLI-Referenz</small></a>
+      <a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/">Internal DNS <small>cluster.local &amp; Service Discovery</small></a>
+      <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/">Namespaces <small>Virtuelle Cluster</small></a>
+    </div>
+  </div>
+
+  <!-- Kubernetes Resources -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#1D8549;"></div>
+      <h2>Kubernetes Resources</h2>
+    </div>
+    <div class="cards">
+      <a href="https://kubernetes.io/docs/concepts/workloads/pods/">Pod <small>Kleinste deploybare Einheit</small></a>
+      <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">Deployment <small>Deklaratives Update von Pods &amp; ReplicaSets</small></a>
+      <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Service <small>Netzwerkzugriff auf Pods</small></a>
+      <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress <small>L7 Routing (HTTP/HTTPS)</small></a>
+      <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">ConfigMap <small>Konfiguration entkoppelt vom Image</small></a>
+      <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Secret <small>Sensible Daten (Passwörter, Keys)</small></a>
+      <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">PersistentVolumeClaim <small>Speicher anfordern</small></a>
+      <a href="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/">StatefulSet <small>Stateful Workloads mit stabilen Namen</small></a>
+      <a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/">DaemonSet <small>Ein Pod pro Node</small></a>
+      <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">NetworkPolicy <small>Firewall-Regeln zwischen Pods</small></a>
+      <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">CRD <small>Custom Resource Definitions</small></a>
+      <a href="https://kubernetes.io/docs/concepts/architecture/controller/">Controller / Operator Pattern <small>Kubernetes Operatoren</small></a>
+    </div>
+  </div>
+
+  <!-- Control Plane & Node Komponenten -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#0B78D0;"></div>
+      <h2>Control Plane &amp; Node Komponenten</h2>
+    </div>
+    <div class="cards">
+      <a href="https://etcd.io">etcd <small>Key-Value Store (Cluster State)</small></a>
+      <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/">Scheduler <small>Pod-Zuweisung zu Nodes</small></a>
+      <a href="https://coredns.io">CoreDNS <small>Cluster-interner DNS-Server</small></a>
+      <a href="https://containerd.io">containerd <small>Container Runtime</small></a>
+      <a href="https://cri-o.io">CRI-O <small>Container Runtime (OCI-konform)</small></a>
+    </div>
+  </div>
+
+  <!-- Cloud Hosting -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#8B7108;"></div>
+      <h2>Cloud Hosting&thinsp;—&thinsp;Managed Kubernetes</h2>
+    </div>
+    <div class="cards">
+      <a href="https://aws.amazon.com/eks/">Amazon EKS <small>Amazon Elastic Kubernetes Service</small></a>
+      <a href="https://cloud.google.com/kubernetes-engine">Google GKE <small>Google Kubernetes Engine</small></a>
+      <a href="https://azure.microsoft.com/products/kubernetes-service/">Azure AKS <small>Azure Kubernetes Service</small></a>
+    </div>
+  </div>
+
+  <!-- On-Premise Distributionen -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#495057;"></div>
+      <h2>On-Premise / Bare-Metal Distributionen</h2>
+    </div>
+    <div class="cards">
+      <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/">kubeadm <small>Offizielles Cluster-Setup-Tool</small></a>
+      <a href="https://k3s.io">K3s <small>Leichtgewichtige K8s-Distribution</small></a>
+      <a href="https://docs.rke2.io">RKE2 <small>Rancher gehärtete Distribution</small></a>
+      <a href="https://www.talos.dev">Talos Linux <small>API-getriebenes Kubernetes-OS</small></a>
+    </div>
+  </div>
+
+  <!-- GitOps & Deployment -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#F34F29;"></div>
+      <h2>GitOps &amp; Deployment</h2>
+    </div>
+    <div class="cards">
+      <a href="https://argo-cd.readthedocs.io">ArgoCD <small>GitOps mit Web-UI</small></a>
+      <a href="https://fluxcd.io">Flux <small>K8s-nativer GitOps-Agent</small></a>
+      <a href="https://helm.sh">Helm <small>Package Manager für Kubernetes</small></a>
+      <a href="https://kustomize.io">Kustomize <small>Native YAML-Overlays (ohne Templates)</small></a>
+      <a href="https://k9scli.io">k9s <small>Terminal-UI für Kubernetes</small></a>
+      <a href="https://opencode.ai">opencode <small>KI-Assistent für diese Präsentation</small></a>
+    </div>
+  </div>
+
+  <!-- Autoscaling -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#E74C3C;"></div>
+      <h2>Autoscaling</h2>
+    </div>
+    <div class="cards">
+      <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/">HPA <small>Horizontal Pod Autoscaler</small></a>
+      <a href="https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler">VPA <small>Vertical Pod Autoscaler</small></a>
+      <a href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler">Cluster Autoscaler <small>Node-Skalierung</small></a>
+    </div>
+  </div>
+
+  <!-- Datenbanken & Operatoren -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#1D8549;"></div>
+      <h2>Datenbanken &amp; Operatoren</h2>
+    </div>
+    <div class="cards">
+      <a href="https://cloudnative-pg.io">CloudNativePG <small>PostgreSQL-Operator für Kubernetes</small></a>
+    </div>
+  </div>
+
+  <!-- Geschichte & Organisationen -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#6C757D;"></div>
+      <h2>Geschichte &amp; Organisationen</h2>
+    </div>
+    <div class="cards">
+      <a href="https://research.google/pubs/borg/">Google Borg <small>Ursprung von Kubernetes</small></a>
+      <a href="https://www.cncf.io">CNCF <small>Cloud Native Computing Foundation</small></a>
+    </div>
+  </div>
+
+  <!-- Hochverfügbarkeit -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#E74C3C;"></div>
+      <h2>Hochverfügbarkeit &amp; Infrastruktur</h2>
+    </div>
+    <div class="cards">
+      <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">ReplicaSet <small>Selbstheilung durch Soll-Zustand</small></a>
+      <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/">PodDisruptionBudget <small>HA-Garantien für Anwendungen</small></a>
+    </div>
+  </div>
+
+  <!-- Interaktive Lernressourcen -->
+  <div class="section">
+    <div class="section-header">
+      <div class="bar" style="background:#00846A;"></div>
+      <h2>Interaktive Lernressourcen</h2>
+    </div>
+    <div class="cards">
+      <a href="https://killercoda.com">Killercoda <small>Interaktive K8s-Szenarien im Browser</small></a>
+      <a href="https://labs.play-with-k8s.com">Play with Kubernetes <small>Kostenlose K8s-Lab-Umgebung</small></a>
+    </div>
+  </div>
+
+  <footer>
+    Begleitsammlung zur Kubernetes-Präsentation &bull; <a href="https://github.com/DI0IK/Kubernetes_manim">GitHub</a>
+  </footer>
+
+</div>
+</body>
+</html>
