@@ -5,7 +5,7 @@ from style import (
     K8S_BLUE, NODE_GREEN, STORE_YELLOW, CTRL_RED,
     TEXT_LIGHT, TEXT_MUTED, BOX_GRAY, BG_BOX_OPACITY
 )
-from helpers import create_modern_box
+from helpers import create_modern_box, create_uniform_arrow
 
 
 class StandardResources(Slide):
@@ -28,9 +28,9 @@ class StandardResources(Slide):
 
         # Objekte definieren (Modern Box)
         yaml_box = create_modern_box("YAML\n(Soll-Zustand)", width=2.5, height=1.5, color=NODE_GREEN)
-        arrow1 = Arrow(start=LEFT, end=RIGHT, color=TEXT_MUTED, buff=0.2)
+        arrow1 = create_uniform_arrow(LEFT, RIGHT)
         ctrl = create_modern_box("kube-\ncontroller", width=2.5, height=1.5, color=K8S_BLUE)
-        arrow2 = Arrow(start=LEFT, end=RIGHT, color=TEXT_MUTED, buff=0.2)
+        arrow2 = create_uniform_arrow(LEFT, RIGHT)
         cluster = create_modern_box("Cluster\n(Ist-Zustand)", width=2.5, height=1.5, color=BOX_GRAY)
 
         # Sauber als Kette arrangieren
@@ -161,11 +161,11 @@ class StandardResources(Slide):
         sp3 = create_modern_box("Pod 3", width=2.0, height=0.6, color=NODE_GREEN, font_size=14)
         svc_pods = VGroup(sp1, sp2, sp3).arrange(DOWN, buff=0.2).move_to(LEFT * 1.5 + DOWN*0.2)
 
-        a1 = Arrow(svc_box.get_right(), sp1.get_left(), color=TEXT_MUTED, buff=0.1)
-        a2 = Arrow(svc_box.get_right(), sp2.get_left(), color=TEXT_MUTED, buff=0.1)
-        a3 = Arrow(svc_box.get_right(), sp3.get_left(), color=TEXT_MUTED, buff=0.1)
+        a1 = create_uniform_arrow(svc_box.get_right(), sp1.get_left())
+        a2 = create_uniform_arrow(svc_box.get_right(), sp2.get_left())
+        a3 = create_uniform_arrow(svc_box.get_right(), sp3.get_left())
         
-        user_arrow = Arrow(svc_box.get_left() + LEFT*1.5, svc_box.get_left(), color=TEXT_LIGHT, buff=0.1)
+        user_arrow = create_uniform_arrow(svc_box.get_left() + LEFT*1.5, svc_box.get_left(), color=TEXT_LIGHT)
         user_label = Text("Traffic", font_size=16, color=TEXT_LIGHT).next_to(user_arrow, UP, buff=0.1)
 
         svc_visual = VGroup(svc_box, svc_pods, a1, a2, a3, user_arrow, user_label)
@@ -208,8 +208,8 @@ class StandardResources(Slide):
         coredns = create_modern_box("CoreDNS", width=2.0, height=1.0, color=K8S_BLUE).shift(DOWN * 1.0)
         svc_dns = create_modern_box("Service\n(my-svc)", width=2.0, height=1.0, color=STORE_YELLOW).shift(RIGHT * 4.5 + DOWN * 1.0)
 
-        arrow1_dns = Arrow(pod_dns.get_right(), coredns.get_left(), color=TEXT_MUTED, buff=0.1)
-        arrow2_dns = Arrow(coredns.get_right(), svc_dns.get_left(), color=TEXT_MUTED, buff=0.1)
+        arrow1_dns = create_uniform_arrow(pod_dns.get_right(), coredns.get_left())
+        arrow2_dns = create_uniform_arrow(coredns.get_right(), svc_dns.get_left())
         label1_dns = Text("DNS Query", font_size=14, color=TEXT_MUTED, weight=BOLD).next_to(arrow1_dns, UP, buff=0.1)
         label2_dns = Text("Cluster IP", font_size=14, color=TEXT_MUTED, weight=BOLD).next_to(arrow2_dns, UP, buff=0.1)
 

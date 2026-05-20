@@ -5,7 +5,7 @@ from style import (
     K8S_BLUE, NODE_GREEN, STORE_YELLOW, CTRL_RED,
     TEXT_LIGHT, TEXT_MUTED, BOX_GRAY, BG_BOX_OPACITY
 )
-from helpers import create_modern_box
+from helpers import create_modern_box, create_uniform_arrow
 
 def create_modern_stack(layers, colors, widths, heights):
     stack = VGroup()
@@ -151,8 +151,8 @@ class GeschichteMotivation(Slide):
         year2 = Text("2014", font_size=SMALL_SIZE, color=K8S_BLUE, weight=BOLD).next_to(k8s, DOWN, buff=0.3)
         year3 = Text("2016+", font_size=SMALL_SIZE, color=NODE_GREEN, weight=BOLD).next_to(cncf, DOWN, buff=0.3)
 
-        arrow1 = Arrow(borg.get_right(), k8s.get_left(), buff=0.2, color=TEXT_MUTED)
-        arrow2 = Arrow(k8s.get_right(), cncf.get_left(), buff=0.2, color=TEXT_MUTED)
+        arrow1 = create_uniform_arrow(borg.get_right(), k8s.get_left())
+        arrow2 = create_uniform_arrow(k8s.get_right(), cncf.get_left())
 
         # Stufenweises Einblenden der Timeline
         self.play(DrawBorderThenFill(borg[0]), Write(borg[1]), FadeIn(year1, shift=UP*0.2))

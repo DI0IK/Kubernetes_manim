@@ -18,16 +18,26 @@ def create_modern_box(text, width=2.5, height=1.0, color=WHITE, font_size=18, st
     label = Text(text, font_size=font_size, color=TEXT_LIGHT, line_spacing=1.1, weight=BOLD).move_to(rect.get_center())
     return VGroup(rect, label)
 
-def create_uniform_arrow(start, end, color=TEXT_MUTED):
+def create_uniform_arrow(start, end, color=TEXT_MUTED, z_index=-1):
     arrow = Arrow(
         start, end,
         color=color,
         buff=0.1,
         stroke_width=2.5,
         tip_length=0.25,
-        tip_width=0.25,
     )
-    return arrow.set_z_index(-1)
+    return arrow.set_z_index(z_index)
+
+
+def create_uniform_double_arrow(start, end, color=TEXT_MUTED, z_index=-1):
+    arrow = DoubleArrow(
+        start, end,
+        color=color,
+        buff=0.1,
+        stroke_width=2.5,
+        tip_length=0.25,
+    )
+    return arrow.set_z_index(z_index)
 
 def create_provider_card(title, subtitle, color):
     card_bg = RoundedRectangle(

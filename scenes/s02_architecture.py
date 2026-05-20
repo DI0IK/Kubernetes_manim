@@ -5,7 +5,7 @@ from style import (
     K8S_BLUE, NODE_GREEN, STORE_YELLOW, CTRL_RED,
     TEXT_LIGHT, TEXT_MUTED, BOX_GRAY, BG_BOX_OPACITY, FLOW_COLOR
 )
-from helpers import create_modern_box
+from helpers import create_modern_box, create_uniform_arrow, create_uniform_double_arrow
 
 
 class ClusterArchitektur(Slide):
@@ -84,9 +84,9 @@ class ClusterArchitektur(Slide):
         cm_box = create_modern_box("Controller\nManager", width=2.4, height=1.0, color=CTRL_RED).move_to(cp_rack.get_center() + RIGHT*3.2 + UP*1.0)
 
         # Arrows pushed to background
-        arrow_etcd = DoubleArrow(etcd_box.get_top(), api_box.get_bottom(), buff=0.1, color=TEXT_MUTED).set_z_index(1)
-        arrow_sched = DoubleArrow(sched_box.get_right(), api_box.get_left(), buff=0.1, color=TEXT_MUTED).set_z_index(1)
-        arrow_cm = DoubleArrow(cm_box.get_left(), api_box.get_right(), buff=0.1, color=TEXT_MUTED).set_z_index(1)
+        arrow_etcd = create_uniform_double_arrow(etcd_box.get_top(), api_box.get_bottom(), z_index=1)
+        arrow_sched = create_uniform_double_arrow(sched_box.get_right(), api_box.get_left(), z_index=1)
+        arrow_cm = create_uniform_double_arrow(cm_box.get_left(), api_box.get_right(), z_index=1)
 
         self.play(FadeIn(cp_rack), Write(cp_rack_title))
         self.play(DrawBorderThenFill(api_box))
@@ -128,9 +128,9 @@ class ClusterArchitektur(Slide):
         api_conn = DashedLine(rack.get_top() + LEFT*2.0, kubelet.get_top(), color=FLOW_COLOR).add_tip()
         conn_label = Text("Command from API", font_size=16, color=FLOW_COLOR).next_to(api_conn, RIGHT, buff=0.2)
         
-        kubelet_runtime_arrow = Line(kubelet.get_bottom(), runtime.get_top(), color=TEXT_MUTED).add_tip()
-        runtime_pod_arrow1 = Line(runtime.get_bottom() + LEFT*1.5, pod1.get_top(), color=TEXT_MUTED).add_tip()
-        runtime_pod_arrow2 = Line(runtime.get_bottom() + RIGHT*1.5, pod2.get_top(), color=TEXT_MUTED).add_tip()
+        kubelet_runtime_arrow = create_uniform_arrow(kubelet.get_bottom(), runtime.get_top())
+        runtime_pod_arrow1 = create_uniform_arrow(runtime.get_bottom() + LEFT*1.5, pod1.get_top())
+        runtime_pod_arrow2 = create_uniform_arrow(runtime.get_bottom() + RIGHT*1.5, pod2.get_top())
 
         # Proxy routing visual - Orthogonal Network Bus underneath the Pods to avoid crossing the runtime box
         bus_y = pod1.get_bottom()[1] - 0.4 # Y-coordinate safely below the pods

@@ -5,7 +5,7 @@ from style import (
     K8S_BLUE, NODE_GREEN, STORE_YELLOW, CTRL_RED,
     TEXT_LIGHT, TEXT_MUTED, BOX_GRAY, BG_BOX_OPACITY, GIT_ORANGE
 )
-from helpers import create_modern_box
+from helpers import create_modern_box, create_uniform_arrow
 
 
 class GitopsCLI(Slide):
@@ -81,7 +81,7 @@ class GitopsCLI(Slide):
         self.play(DrawBorderThenFill(agent[0]), Write(agent[1]))
 
         # Pull/Watch Pfeil (Datenfluss Git -> Agent)
-        pull_arrow = Arrow(git.get_right(), agent.get_left(), color=TEXT_MUTED, buff=0.1).set_z_index(-1)
+        pull_arrow = create_uniform_arrow(git.get_right(), agent.get_left())
         pull_label = Text("1. Watch / Pull", font_size=14, color=TEXT_LIGHT, weight=BOLD).next_to(pull_arrow, UP, buff=0.15)
         
         self.play(GrowArrow(pull_arrow), FadeIn(pull_label, shift=UP*0.2))
@@ -89,7 +89,7 @@ class GitopsCLI(Slide):
         # Sync Pfeil (Agent wendet Änderungen auf Cluster an)
         self.play(DrawBorderThenFill(cluster[0]), Write(cluster[1]))
         
-        sync_arrow = Arrow(agent.get_right(), cluster.get_left(), color=TEXT_MUTED, buff=0.1).set_z_index(-1)
+        sync_arrow = create_uniform_arrow(agent.get_right(), cluster.get_left())
         sync_label = Text("2. Sync / Apply", font_size=14, color=TEXT_LIGHT, weight=BOLD).next_to(sync_arrow, UP, buff=0.15)
         
         self.play(GrowArrow(sync_arrow), FadeIn(sync_label, shift=UP*0.2))
