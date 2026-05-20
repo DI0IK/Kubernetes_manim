@@ -1,0 +1,24 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-cluster
+spec:
+  instances: 3
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
+  storage:
+    size: 10Gi
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  postgresql:
+    parameters:
+      max_connections: "200"
+  replicationSlots:
+    highAvailability:
+      enabled: true
+  failoverDelay: 30
+  primaryUpdateStrategy: unsupervised

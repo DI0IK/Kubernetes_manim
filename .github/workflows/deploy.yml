@@ -1,0 +1,72 @@
+name: Build presentation & deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libcairo2-dev libpango1.0-dev
+
+      - name: Set up venv
+        run: python -m venv venv && venv/bin/pip install --upgrade pip
+
+      - name: Install Python dependencies
+        run: venv/bin/pip install -r requirements.txt
+
+      - name: Render all scenes
+        run: |
+          for scene in scenes/s*.py; do
+            class=$(sed -n "s/^class \([A-Za-z]*\)(.*/\1/p" "$scene")
+            echo "Rendering $class from $scene ..."
+            venv/bin/manim-slides render "$scene" "$class"
+          done
+
+      - name: Convert to HTML
+        run: |
+          mkdir -p _site
+          venv/bin/manim-slides convert --to html \
+            GeschichteMotivation \
+            ClusterArchitektur \
+            StandardResources \
+            GitopsCLI \
+            DemoDeployment \
+            HighAvailability \
+            Autoscaling \
+            CloudHosting _site/index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
