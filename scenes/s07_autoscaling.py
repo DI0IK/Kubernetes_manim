@@ -108,7 +108,7 @@ class Autoscaling(Slide):
         self.play(DrawBorderThenFill(vpa[0]), Write(vpa[1]))
 
         small_pod_bg = RoundedRectangle(width=2.8, height=1.6, corner_radius=0.2, color=NODE_GREEN, stroke_width=2, fill_color=NODE_GREEN, fill_opacity=BG_BOX_OPACITY)
-        small_t1 = Text("Pod (Muted)", font_size=18, color=TEXT_LIGHT, weight=BOLD)
+        small_t1 = Text("Pod", font_size=18, color=TEXT_LIGHT, weight=BOLD)
         small_t2 = Text("CPU: 250m\nRAM: 256Mi", font_size=14, color=TEXT_MUTED, line_spacing=1.2)
         small_text = VGroup(small_t1, small_t2).arrange(DOWN, buff=0.2).move_to(small_pod_bg)
         small_g = VGroup(small_pod_bg, small_text).shift(DOWN*0.5)
@@ -123,7 +123,7 @@ class Autoscaling(Slide):
         self.next_slide()
 
         big_pod_bg = RoundedRectangle(width=4.2, height=2.4, corner_radius=0.2, color=NODE_GREEN, stroke_width=2, fill_color=NODE_GREEN, fill_opacity=BG_BOX_OPACITY)
-        big_t1 = Text("Pod (Resized)", font_size=22, color=TEXT_LIGHT, weight=BOLD)
+        big_t1 = Text("Pod", font_size=22, color=TEXT_LIGHT, weight=BOLD)
         big_t2 = Text("CPU: 500m\nRAM: 1Gi", font_size=16, color=TEXT_LIGHT, line_spacing=1.2)
         big_text = VGroup(big_t1, big_t2).arrange(DOWN, buff=0.3).move_to(big_pod_bg)
         big_g = VGroup(big_pod_bg, big_text).move_to(small_g)
@@ -179,7 +179,7 @@ class Autoscaling(Slide):
         self.play(Write(api_call))
         self.next_slide()
 
-        n3 = create_modern_box("Node 3\n(New)", width=2.6, height=2.4, color=NODE_GREEN)
+        n3 = create_modern_box("Node 3", width=2.6, height=2.4, color=NODE_GREEN)
         n3[1].next_to(n3[0].get_top(), DOWN, buff=0.15)
 
         all_nodes_target = VGroup(n1.copy(), n2.copy(), n3).arrange(RIGHT, buff=0.4).move_to(cluster_box.get_center())
