@@ -148,8 +148,8 @@ class GeschichteMotivation(Slide):
         cncf = create_modern_box("CNCF\nGraduated", width=2.5, height=1.5, color=NODE_GREEN).shift(RIGHT*3.5)
 
         year1 = Text("~2003", font_size=SMALL_SIZE, color=TEXT_MUTED, weight=BOLD).next_to(borg, DOWN, buff=0.3)
-        year2 = Text("2014", font_size=SMALL_SIZE, color=K8S_BLUE, weight=BOLD).next_to(k8s, DOWN, buff=0.3)
-        year3 = Text("2016+", font_size=SMALL_SIZE, color=NODE_GREEN, weight=BOLD).next_to(cncf, DOWN, buff=0.3)
+        year2 = Text("2015", font_size=SMALL_SIZE, color=K8S_BLUE, weight=BOLD).next_to(k8s, DOWN, buff=0.3)
+        year3 = Text("2018", font_size=SMALL_SIZE, color=NODE_GREEN, weight=BOLD).next_to(cncf, DOWN, buff=0.3)
 
         arrow1 = create_uniform_arrow(borg.get_right(), k8s.get_left())
         arrow2 = create_uniform_arrow(k8s.get_right(), cncf.get_left())

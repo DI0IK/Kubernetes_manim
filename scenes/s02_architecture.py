@@ -124,9 +124,9 @@ class ClusterArchitektur(Slide):
         pod1 = create_modern_box("Pod (App A)", width=2.4, height=0.8, color=NODE_GREEN).move_to(rack.get_center() + DOWN*2.0 + LEFT*3.5)
         pod2 = create_modern_box("Pod (App B)", width=2.4, height=0.8, color=NODE_GREEN).move_to(rack.get_center() + DOWN*2.0 + LEFT*0.5)
 
-        # Connections: Command arrow now cleanly starts from the rack border so it doesn't cross the titles
-        api_conn = DashedLine(rack.get_top() + LEFT*2.0, kubelet.get_top(), color=FLOW_COLOR).add_tip()
-        conn_label = Text("Command from API", font_size=16, color=FLOW_COLOR).next_to(api_conn, RIGHT, buff=0.2)
+        # Connections: Kubelet watches/pulls from the API server
+        api_conn = DashedLine(kubelet.get_top(), rack.get_top() + LEFT*2.0, color=FLOW_COLOR).add_tip()
+        conn_label = Text("Watch API for Pod Specs", font_size=16, color=FLOW_COLOR).next_to(api_conn, RIGHT, buff=0.2)
         
         kubelet_runtime_arrow = create_uniform_arrow(kubelet.get_bottom(), runtime.get_top())
         runtime_pod_arrow1 = create_uniform_arrow(runtime.get_bottom() + LEFT*1.5, pod1.get_top())

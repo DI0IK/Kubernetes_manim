@@ -10,5 +10,5 @@ spec:
       - image: cluster-autoscaler:v1.30
         command:
         - ./cluster-autoscaler
-        - --nodes=2:10
+        - --nodes=1:10:default-worker-asg
         - --scale-down-enabled=true
