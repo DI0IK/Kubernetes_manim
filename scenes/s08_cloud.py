@@ -17,7 +17,7 @@ class CloudHosting(Slide):
         subtitle = Text("Managed Kubernetes, Load Balancer und mehr", font_size=BODY_SIZE, color=TEXT_MUTED).next_to(title, DOWN)
         
         self.play(FadeIn(title, shift=UP*0.2), FadeIn(subtitle, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Managed Kubernetes** – **EKS** (Elastic Kubernetes Service, Amazon), **GKE** (Google Kubernetes Engine), **AKS** (Azure Kubernetes Service). Der Cloud-Provider betreibt die Control Plane kostenlos/nach Aufwand. User managed nur Worker Nodes.")
         self.play(FadeOut(subtitle), title.animate.to_edge(UP, buff=0.4))
 
         # ==========================================
@@ -42,8 +42,7 @@ class CloudHosting(Slide):
                 lag_ratio=0.25
             )
         )
-        self.next_slide()
-        self.play(FadeOut(providers))
+        self.next_slide(notes="**On-Premise** – kubeadm (offizielles Setup-Tool), K3s (leichtgewichtig, für Edge/IoT), **RKE2** (Rancher Kubernetes Engine 2, gehärtet für Security), Talos (API-getrieben, minimales OS für K8s). Wahl hängt von Sicherheit & Ressourcen ab.")
 
         # ==========================================
         # SLIDE 3: Bare Metal / On-Premise
@@ -69,8 +68,7 @@ class CloudHosting(Slide):
                 lag_ratio=0.2
             )
         )
-        self.next_slide()
-        self.play(FadeOut(bare_metal_group))
+        self.next_slide(notes="**LoadBalancer Service** – YAML-Definition eines Service vom Typ LoadBalancer. Port 80 wird exponiert. Der Cloud-Provider provisioniert automatisch einen externen Load Balancer (ALB, NLB, GLB).")
 
         # ==========================================
         # SLIDE 4: Load Balancer (Visual + Code)
@@ -103,7 +101,7 @@ class CloudHosting(Slide):
 
         # 1. First, reveal YAML code
         self.play(FadeIn(svc_code, shift=RIGHT * 0.2))
-        self.next_slide()
+        self.next_slide(notes="**Interner Aufbau** – K8s Service (Cluster-intern) verteilt Traffic auf Pod 1 & Pod 2. Service hat eine stabile Cluster-IP, Pods sind dahinter austauschbar.")
 
         # 2. Render K8s internal architecture (Service & Pods)
         self.play(DrawBorderThenFill(k8s_svc[0]), Write(k8s_svc[1]))
@@ -114,9 +112,7 @@ class CloudHosting(Slide):
                 lag_ratio=0.2
             )
         )
-        self.next_slide()
-
-        # 4. Show API provisioning cloud loadbalancer
+        self.next_slide(notes="**Cloud LB** – Kubernetes kommuniziert mit der Cloud-API (AWS/GCP/Azure), die automatisch einen externen Load Balancer erstellt. Der Cloud-LB leitet Traffic an den K8s-Service weiter. **ALB** (Application LB, Layer 7), **NLB** (Network LB, Layer 4), **GLB** (Google LB).")
         api_call = Text("K8s triggers Cloud API...", font_size=14, color=STORE_YELLOW, weight=BOLD).next_to(cloud_lb, UP, buff=0.15)
         self.play(FadeIn(api_call, shift=DOWN*0.1))
         
@@ -125,12 +121,12 @@ class CloudHosting(Slide):
             GrowArrow(a2)
         )
         self.play(FadeOut(api_call))
-        self.next_slide()
+        self.next_slide(notes="**Externer Traffic** – Public Internet → Cloud-LB → K8s Service → Pod 1/Pod 2. Der vollständige Datenpfad vom Benutzer zur Anwendung.")
 
         # 5. External Client traffic hits the cloud LB
         self.play(DrawBorderThenFill(internet[0]), Write(internet[1]))
         self.play(GrowArrow(a1))
-        self.next_slide()
+        self.next_slide(notes="**Abschluss** – Vielen Dank! Fragen? QR-Code führt zur Links-Sammlung mit allen Ressourcen aus der Präsentation.")
 
         # ==========================================
         # SLIDE 4: Outro / Questions

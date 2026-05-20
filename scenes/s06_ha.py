@@ -17,7 +17,7 @@ class HighAvailability(Slide):
         subtitle = Text("Ausfallsicherheit auf allen Ebenen", font_size=BODY_SIZE, color=TEXT_MUTED).next_to(title, DOWN)
         
         self.play(FadeIn(title, shift=UP*0.2), FadeIn(subtitle, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**ReplicaSet** – Controller, der eine bestimmte Anzahl Pods garantiert. Soll-Zustand: 3. Der ReplicaSet-Controller überwacht ständig den Ist-Zustand und greift bei Abweichungen ein.")
         self.play(FadeOut(subtitle), title.animate.to_edge(UP, buff=0.4))
 
         # ==========================================
@@ -47,9 +47,7 @@ class HighAvailability(Slide):
                 lag_ratio=0.2
             )
         )
-        self.next_slide()
-
-        # Pod 3 fällt aus
+        self.next_slide(notes="**Self-Healing** – Pod 3 failed (rot). Der Controller erkennt die Abweichung und startet Pod 4 als Ersatz. Der tote Pod wird evictiert, der neue Pod wird gestartet. Selbstheilung automatisch.")
         dead_pod = create_modern_box("Pod 3\n(failed)", width=2.0, height=1.2, color=CTRL_RED).move_to(p3)
         crash_cross = Text("✗", font_size=50, color=CTRL_RED, weight=BOLD).move_to(dead_pod)
 
@@ -68,7 +66,7 @@ class HighAvailability(Slide):
             new_pod.animate.move_to(p3),
             run_time=1.2
         )
-        self.next_slide()
+        self.next_slide(notes="**Primary-Replica** – PostgreSQL-Cluster mit einem Primary und zwei Replicas. Datenreplikation vom Primary zu den Standby-Replicas. Bei Primary-Ausfall wird eine Replica promoted.")
 
         # ==========================================
         # SLIDE 3: Failover in Stateful-Clustern
@@ -94,9 +92,7 @@ class HighAvailability(Slide):
                 lag_ratio=0.3
             )
         )
-        self.next_slide()
-
-        # Primary stirbt
+        self.next_slide(notes="**Failover** – Primary fällt aus (rot). Replica 1 wird zum neuen Primary promoted. Replikation läuft jetzt von Replica 1 (neuer Primary) zu Replica 2. Minimale Ausfallzeit.")
         dead_primary = create_modern_box("Primary\n(failed)", width=2.5, height=1.2, color=CTRL_RED).move_to(primary)
         cross = Text("✗", font_size=50, color=CTRL_RED, weight=BOLD).move_to(primary)
         
@@ -118,7 +114,7 @@ class HighAvailability(Slide):
             FadeOut(dead_primary), FadeOut(cross),
             GrowArrow(new_conn)
         )
-        self.next_slide()
+        self.next_slide(notes="**3 Availability Zones (AZs)** – Jede AZ hat Control Plane + Worker Nodes. Traffic wird auf alle AZs verteilt. Bei Ausfall einer AZ übernehmen die anderen. **AZ** = physisch getrennter Rechenzentrum-Standort.")
 
         # ==========================================
         # SLIDE 4: HA auf Infrastrukturebene (3 AZs)
@@ -157,7 +153,7 @@ class HighAvailability(Slide):
             arrow = create_uniform_arrow(traffic.get_bottom(), az_box.get_top(), color=TEXT_LIGHT)
             arrows.add(arrow)
         self.play(*[GrowArrow(a) for a in arrows])
-        self.next_slide()
+        self.next_slide(notes="**AZ Failure** – AZ B fällt aus. Traffic wird automatisch auf AZ A und AZ C umgeleitet (gelbe Pfeile). Die Anwendung bleibt verfügbar. Kubernetes verteilt Pods idealerweise über AZs via Topology Spread Constraints.")
 
         # AZ B (middle) fails
         az_b_box = az_boxes[1]
@@ -171,11 +167,7 @@ class HighAvailability(Slide):
             arrows[0].animate.set_color(STORE_YELLOW).set_stroke(width=6),
             arrows[2].animate.set_color(STORE_YELLOW).set_stroke(width=6),
         )
-        self.next_slide()
-
-        # ==========================================
-        # SLIDE 5: Fazit
-        # ==========================================
+        self.next_slide(notes="**Fazit** – Kubernetes bietet native Redundanz auf jeder Ebene: ReplicaSet (Pods), Failover (Datenbank), Multi-AZ (Infrastruktur). **PodDisruptionBudget** für kontrollierte Ausfälle.")
         outro = Text("Kubernetes = Native Redundanz auf jeder Ebene", font_size=BODY_SIZE + 4, color=NODE_GREEN, weight=BOLD)
         self.play(
             *[FadeOut(m) for m in self.mobjects if m != title],

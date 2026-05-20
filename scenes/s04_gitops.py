@@ -17,7 +17,7 @@ class GitopsCLI(Slide):
         subtitle = Text("Moderne Deployment-Strategien im Vergleich", font_size=BODY_SIZE, color=TEXT_MUTED).next_to(title, DOWN)
         
         self.play(FadeIn(title, shift=UP*0.2), FadeIn(subtitle, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**kubectl** – primäres CLI-Tool. Imperativ vs. deklarativ: `apply` ist deklarativ (YAML), `run`/`expose` sind imperativ. **k9s** – Terminal-UI, erleichtert Navigation und Troubleshooting.")
         self.play(FadeOut(subtitle), title.animate.to_edge(UP, buff=0.4))
 
         # ==========================================
@@ -60,7 +60,7 @@ class GitopsCLI(Slide):
         # Schreibmaschinen-Effekt für die Terminal Commands
         for cmd in cmds:
             self.play(AddTextLetterByLetter(cmd), run_time=0.8)
-        self.next_slide()
+        self.next_slide(notes="**GitOps** – Git Repository ist die Single Source of Truth. GitOps Agent (ArgoCD/Flux) pulled Änderungen und synct sie automatisch in den Cluster. Pull-basiert, kein direkter kubectl-Zugriff nötig.")
 
         # ==========================================
         # SLIDE 3: GitOps Paradigma
@@ -95,7 +95,7 @@ class GitopsCLI(Slide):
         self.play(GrowArrow(sync_arrow), FadeIn(sync_label, shift=UP*0.2))
 
         gitops_group = VGroup(flow_group, pull_arrow, pull_label, sync_arrow, sync_label)
-        self.next_slide()
+        self.next_slide(notes="**ArgoCD** – Fokus auf Web-UI, visuelles Dashboard, Application-Set (Multi-Cluster). **Flux** – K8s-nativ via CRDs, deklarativer Ansatz, keine separate UI nötig. Beide unterstützen Helm & Kustomize.")
 
         # ==========================================
         # SLIDE 4: ArgoCD vs Flux
@@ -128,11 +128,7 @@ class GitopsCLI(Slide):
                 lag_ratio=0.3
             )
         )
-        self.next_slide()
-
-        # ==========================================
-        # SLIDE 5: Helm & Kustomize
-        # ==========================================
+        self.next_slide(notes="**Helm** – Package Manager (Charts/Templates). Versionierte Pakete, einfaches Deployment & Rollback. **Kustomize** – native YAML-Overlays, base/overlays-Struktur, keine Templates, umgebungs-spezifische Patches.")
         self.play(FadeOut(argocd_g), FadeOut(flux_g))
 
         t5 = Text("Helm & Kustomize", font_size=SECTION_SIZE, color=TEXT_LIGHT).to_edge(UP, buff=0.4)
@@ -165,11 +161,7 @@ class GitopsCLI(Slide):
                 lag_ratio=0.3
             )
         )
-        self.next_slide()
-
-        # ==========================================
-        # SLIDE 6: Outro
-        # ==========================================
+        self.next_slide(notes="**Fazit** – GitOps = Deployments mit Sicherheitsnetz. Single Source of Truth, automatische Synchronisation, einfaches Rollback. ArgoCD und Flux sind die führenden Tools.")
         outro = Text("GitOps = Deployments mit Sicherheitsnetz", font_size=BODY_SIZE + 4, color=NODE_GREEN, weight=BOLD)
         
         self.play(FadeOut(helm_g), FadeOut(kust_g), Transform(title, outro))

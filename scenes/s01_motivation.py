@@ -28,7 +28,7 @@ class GeschichteMotivation(Slide):
         subtitle = Text("Warum Kubernetes?", font_size=BODY_SIZE, color=TEXT_MUTED).next_to(title, DOWN)
         
         self.play(Write(title, run_time=1.5), FadeIn(subtitle, shift=UP*0.5, run_time=1.5))
-        self.next_slide()
+        self.next_slide(notes="**Monolith** – Eine einzelne, große Codebasis. Probleme: Langsame Releases, Skalierung nur als Ganzes, hohe Fehlerabhängigkeit.")
         self.play(FadeOut(subtitle), title.animate.to_edge(UP, buff=0.4))
 
         # ==========================================
@@ -43,7 +43,7 @@ class GeschichteMotivation(Slide):
         monolith = VGroup(monolith_rect, ml_text)
         
         self.play(DrawBorderThenFill(monolith_rect), Write(ml_text))
-        self.next_slide()
+        self.next_slide(notes="**VM vs Container** – VMs enthalten ein eigenes Betriebssystem (Guest OS) + Hypervisor, das macht sie schwer (~GB). Container teilen sich den Host-Kernel und sind daher leicht (~MB).")
 
         # Risse im Monolithen
         cracks = VGroup(
@@ -111,9 +111,8 @@ class GeschichteMotivation(Slide):
         self.play(DrawBorderThenFill(vm_box), Write(vm_title))
         self.play(LaggedStart(*[FadeIn(layer, shift=UP*0.2) for layer in reversed(vm_stack)], lag_ratio=0.2))
         self.play(FadeIn(vm_text, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="Container teilen sich den Host-Kernel → kein eigener Overhead. Start in Sekunden statt Minuten. Ideal für Microservices.")
 
-        # Container Stack bauen (Ohne Guest OS!)
         ctr_layers = ["App A", "Bins/Libs", "Container Engine"]
         ctr_colors = [NODE_GREEN, NODE_GREEN, STORE_YELLOW]
         ctr_sizes = [(2.8, 0.8), (2.8, 0.8), (2.8, 0.6)]
@@ -130,7 +129,7 @@ class GeschichteMotivation(Slide):
         self.play(DrawBorderThenFill(ctr_box), Write(ctr_title))
         self.play(LaggedStart(*[FadeIn(layer, shift=UP*0.2) for layer in reversed(ctr_stack)], lag_ratio=0.2))
         self.play(FadeIn(ctr_text, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Zeitleiste** – Google Borg (~2003): interner Cluster-Manager. Kubernetes 1.0 (2015): Open-Source-Release. CNCF Graduation (2018): K8s wird reif erklärt. **CNCF** = Cloud Native Computing Foundation.")
 
         self.play(
             FadeOut(vm_group), FadeOut(vm_text), 
@@ -162,10 +161,8 @@ class GeschichteMotivation(Slide):
         self.play(GrowArrow(arrow2))
         
         self.play(DrawBorderThenFill(cncf[0]), Write(cncf[1]), FadeIn(year3, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Fazit** – Kubernetes ist der De-facto-Standard für Container-Orchestrierung. Alle großen Cloud-Provider bieten Managed K8s an.")
 
-        # ==========================================
-        # SLIDE 5: Fazit
         # ==========================================
         out_text1 = Text("Kubernetes ist der De-facto-Standard", font_size=BODY_SIZE + 4, color=TEXT_MUTED)
         out_text2 = Text("für Container-Orchestrierung", font_size=BODY_SIZE + 4, color=NODE_GREEN, weight=BOLD)

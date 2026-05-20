@@ -19,7 +19,7 @@ class ClusterArchitektur(Slide):
         
         # State of the art intro: Draw borders of text, then fill
         self.play(Write(title, run_time=1.5), FadeIn(subtitle, shift=UP*0.5, run_time=1.5))
-        self.next_slide()
+        self.next_slide(notes="**Control Plane** – API Server (zentraler Einstiegspunkt), etcd (verteilter Key-Value-Store, Cluster-State), Scheduler (verteilt Pods auf Nodes). **Worker Nodes** – Kubelet (Node-Agent), Container Runtime, Kube-Proxy (Netzwerk).")
         self.play(FadeOut(subtitle), title.animate.to_edge(UP, buff=0.4))
 
         # ==========================================
@@ -63,7 +63,7 @@ class ClusterArchitektur(Slide):
             LaggedStart(FadeIn(node1, shift=UP), FadeIn(node2, shift=UP), FadeIn(node3, shift=UP), lag_ratio=0.15),
         )
         self.play(FadeIn(cp_sub, shift=UP*0.2), FadeIn(dp_sub, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**etcd** – konsistenter, hochverfügbarer Key-Value-Store (Raft Consensus). Speichert den gesamten Cluster-Status. **Scheduler** – entscheidet auf welcher Node ein Pod läuft (Ressourcenanforderungen, Affinitäten). **Controller Manager** – regelt Soll-/Ist-Zustand (Deployments, ReplicaSets, etc.).")
 
         # ==========================================
         # SLIDE 3: Control Plane Deep Dive
@@ -98,7 +98,7 @@ class ClusterArchitektur(Slide):
                 lag_ratio=0.3
             )
         )
-        self.next_slide()
+        self.next_slide(notes="**Kubelet** – primärer Node-Agent. Watched den API-Server auf Pod-Spezifikationen, startet Container, meldet Status. **Kube-Proxy** – verwaltet Network-Regeln (iptables/**IPVS** = IP Virtual Server) für Services.")
 
         # ==========================================
         # SLIDE 4: Worker Node Deep Dive
@@ -152,7 +152,7 @@ class ClusterArchitektur(Slide):
 
         self.play(FadeIn(rack), Write(rack_title))
         self.play(FadeIn(kubelet, shift=UP*0.3), FadeIn(proxy, shift=UP*0.3))
-        self.next_slide()
+        self.next_slide(notes="**Container Runtime** – z.B. containerd oder **CRI-O** (Container Runtime Interface - Open, OCI-konform, speziell für K8s entwickelt). Zuständig für Pull von Images und Ausführung der Container. **Pods** – kleinste deploybare Einheit in K8s, ein oder mehrere Container.")
 
         # Data flow to Kubelet
         self.play(Create(api_conn), Write(conn_label))
@@ -165,19 +165,14 @@ class ClusterArchitektur(Slide):
                 lag_ratio=0.2
             )
         )
-        self.next_slide()
-
-        self.play(Create(proxy_drop))
+        self.next_slide(notes="**Netzwerk** – Kube-Proxy routet Traffic zu den Pods über einen internen Network-Bus (z.B. CNI-Plugins wie Calico, Cilium, Flannel). Jeder Pod erhält eine eigene IP.")
         self.play(
+            Create(proxy_drop),
             Create(bus_line1), Create(up_pod2),
             Create(bus_line2), Create(up_pod1),
             run_time=1.5
         )
-        self.next_slide()
-
-        # ==========================================
-        # SLIDE 5: Outro
-        # ==========================================
+        self.next_slide(notes="**Fazit** – Control Plane + Worker Nodes ergeben zusammen einen stabilen, skalierbaren Cluster. Alle Komponenten kommunizieren über den API Server.")
         outro_1 = Text("Zusammenwirken ergibt:", font_size=BODY_SIZE, color=TEXT_MUTED)
         outro_2 = Text("Einen stabilen, skalierbaren Cluster.", font_size=TITLE_SIZE, color=NODE_GREEN, weight=BOLD)
         outro = VGroup(outro_1, outro_2).arrange(DOWN, buff=0.5).move_to(ORIGIN)

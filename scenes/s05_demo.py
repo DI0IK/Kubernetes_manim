@@ -18,7 +18,7 @@ class DemoDeployment(Slide):
         subtitle = Text("Datenbank → Backend → LoadBalancer", font_size=BODY_SIZE, color=TEXT_MUTED).next_to(title, DOWN)
         
         self.play(FadeIn(title, shift=UP*0.2), FadeIn(subtitle, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Setup** – Links die Architektur-Übersicht (Git → ArgoCD → cnpg Operator → API), rechts ein simuliertes Terminal. Drei Namespaces: database, web. CloudNativePG für PostgreSQL.")
         self.play(FadeOut(subtitle), title.animate.to_edge(UP, buff=0.4))
 
         # ==========================================
@@ -61,7 +61,7 @@ class DemoDeployment(Slide):
 
         self.play(FadeIn(visual_group, shift=RIGHT*0.2))
         self.play(DrawBorderThenFill(term_frame), FadeIn(VGroup(term_bar, term_bar_bottom, dots, term_title_text)))
-        self.next_slide()
+        self.next_slide(notes="**Phase 1: PostgreSQL** – Die CRD `Cluster` von CloudNativePG definiert einen 3er-Datenbank-Cluster. YAML wird ins Git-Repository gepusht.")
 
         # ==========================================
         # PHASE 1: Deploy PostgreSQL
@@ -73,7 +73,7 @@ class DemoDeployment(Slide):
         except: pass
 
         self.play(FadeIn(pg_code, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Git Push** → ArgoCD synct → API Server → cnpg Operator reconciling. Der Operator erstellt die PostgreSQL-Pods. Terminal zeigt: git push, ArgoCD Sync, cnpg Reconciling.")
 
         # Commit to Git
         self.play(pg_code.animate.scale(0.1).move_to(git_box.get_center()).set_opacity(0), run_time=0.8)
@@ -100,7 +100,7 @@ class DemoDeployment(Slide):
 
         arrow_api_op = create_uniform_arrow(api_box.get_left(), op_box.get_right())
         self.play(GrowArrow(arrow_api_op))
-        self.next_slide()
+        self.next_slide(notes="**Pods Pending** – Die 3 PostgreSQL-Pods wurden vom cnpg Operator angefordert, warten aber auf Scheduling (kein Node-Platz oder Images werden geladen).")
 
         # Pods Pending -> Running
         l4 = Text("$ kubectl get pods -n database -w", font_size=t_font, color=STORE_YELLOW, font="Monospace").next_to(l3, DOWN, buff=0.3).align_to(l1, LEFT)
@@ -122,7 +122,7 @@ class DemoDeployment(Slide):
 
         self.play(FadeIn(l5), FadeIn(l6_pend), FadeIn(l7_pend), FadeIn(l8_pend))
         self.play(Create(p1[0]), Write(p1[1]), Create(p2[0]), Write(p2[1]), Create(p3[0]), Write(p3[1]))
-        self.next_slide()
+        self.next_slide(notes="**Pods Running** – Alle 3 PostgreSQL-Instanzen sind gestartet. Status wechselt von Pending (gelb/grau) zu Running (grün). Primary-Replica-Setup wird automatisch konfiguriert.")
 
         l6_run = Text("pg-0           1/1    Running", font_size=t_font, color=NODE_GREEN, font="Monospace").move_to(l6_pend, aligned_edge=LEFT)
         l7_run = Text("pg-1           1/1    Running", font_size=t_font, color=NODE_GREEN, font="Monospace").move_to(l7_pend, aligned_edge=LEFT)
@@ -132,7 +132,7 @@ class DemoDeployment(Slide):
             Transform(l6_pend, l6_run), Transform(l7_pend, l7_run), Transform(l8_pend, l8_run),
             p1[0].animate.set_fill(opacity=BG_BOX_OPACITY), p2[0].animate.set_fill(opacity=BG_BOX_OPACITY), p3[0].animate.set_fill(opacity=BG_BOX_OPACITY)
         )
-        self.next_slide()
+        self.next_slide(notes="**Phase 2: Web App** – Deployment YAML für die Web-App (nginx). Enthält die DB_HOST-Umgebungsvariable für die PostgreSQL-Verbindung via K8s-internen DNS.")
 
         # ==========================================
         # PHASE 2: Deploy Web App & LoadBalancer
@@ -151,10 +151,10 @@ class DemoDeployment(Slide):
         except: pass
 
         self.play(FadeIn(web_deploy_code, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**LoadBalancer Service** – Service vom Typ LoadBalancer (erhält externe IP). Richtet Traffic auf die Web-App-Pods. LoadBalancer wird vom Cloud-Provider bereitgestellt.")
 
         self.play(FadeOut(web_deploy_code), FadeIn(web_svc_code, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Web Pods** – 2 Web-App-Pods werden deployed. Status zunächst Pending, dann Running. API Server verteilt die neuen Ressourcen an die Nodes.")
 
         # Commit both to Git
         self.play(FadeOut(web_svc_code), run_time=0.8)
@@ -189,7 +189,7 @@ class DemoDeployment(Slide):
 
         self.play(FadeIn(t4), FadeIn(t5_pend), FadeIn(t6_pend))
         self.play(Create(w1[0]), Write(w1[1]), Create(w2[0]), Write(w2[1]))
-        self.next_slide()
+        self.next_slide(notes="**Web Pods Running** – Beide Web-Pods sind bereit. Die Datenbank-Verbindung wird über den internen DNS-Namen `pg-cluster-rw.database.svc.cluster.local` hergestellt.")
 
         t5_run = Text("web-0          1/1    Running", font_size=t_font, color=NODE_GREEN, font="Monospace").move_to(t5_pend, aligned_edge=LEFT)
         t6_run = Text("web-1          1/1    Running", font_size=t_font, color=NODE_GREEN, font="Monospace").move_to(t6_pend, aligned_edge=LEFT)
@@ -198,13 +198,13 @@ class DemoDeployment(Slide):
             Transform(t5_pend, t5_run), Transform(t6_pend, t6_run),
             w1[0].animate.set_fill(opacity=BG_BOX_OPACITY), w2[0].animate.set_fill(opacity=BG_BOX_OPACITY)
         )
-        self.next_slide()
+        self.next_slide(notes="**DB Connection** – Verbindung zwischen Web-App und PostgreSQL über den internen K8s-DNS. Authentifizierung über Umgebungsvariablen (DB_HOST, DB_USER, etc.).")
 
         # Database Connection Arrow
         conn_arrow = create_uniform_arrow(web_boundary.get_left(), pg_boundary.get_right(), color=STORE_YELLOW)
         conn_label = Text("DB Auth", font_size=12, color=STORE_YELLOW, weight=BOLD).next_to(conn_arrow, UP, buff=0.05)
         self.play(GrowArrow(conn_arrow), FadeIn(conn_label))
-        self.next_slide()
+        self.next_slide(notes="**LoadBalancer Pending** – Der Cloud-Provider (AWS/GCP/Azure) benötigt Zeit, um eine externe IP zuzuweisen. `EXTERNAL-IP` bleibt `<pending>`.")
 
         # LoadBalancer IP Assignment
         t7 = Text("$ kubectl get svc -n web web-lb -w", font_size=t_font, color=STORE_YELLOW, font="Monospace").next_to(t6_pend, DOWN, buff=0.3).align_to(t1, LEFT)
@@ -214,7 +214,7 @@ class DemoDeployment(Slide):
         t9_pend = Text("web-lb    LoadBalancer   <pending>     80:31200/TCP", font_size=t_font, color=TEXT_INVERTED_MUTED, font="Monospace").next_to(t8, DOWN, buff=0.1).align_to(t1, LEFT)
         
         self.play(FadeIn(t8), FadeIn(t9_pend))
-        self.next_slide()
+        self.next_slide(notes="**LoadBalancer Ready** – Externe IP `203.0.113.50` wurde zugewiesen. Traffic von außen erreicht die Web-App via Port 80. Full-Stack läuft.")
 
         t9_run = Text("web-lb    LoadBalancer   203.0.113.50  80:31200/TCP", font_size=t_font, color=NODE_GREEN, font="Monospace").move_to(t9_pend, aligned_edge=LEFT)
         lb_traffic_arrow = create_uniform_arrow(lb_box.get_left(), web_boundary.get_right(), color=TEXT_LIGHT)
@@ -222,7 +222,7 @@ class DemoDeployment(Slide):
 
         self.play(Transform(t9_pend, t9_run))
         self.play(GrowArrow(lb_traffic_arrow), FadeIn(lb_label))
-        self.next_slide()
+        self.next_slide(notes="**Fazit Demo** – Full-Stack Projekt (PostgreSQL + Web-App + LoadBalancer) erfolgreich via GitOps deployed. Alles deklarativ in YAML definiert und via Git-Push ausgerollt.")
 
         # ==========================================
         # SLIDE 10: Fazit

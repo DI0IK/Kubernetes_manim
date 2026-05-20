@@ -17,7 +17,7 @@ class StandardResources(Slide):
         subtitle = Text("Deklaratives Paradigma, Resources, Custom Resources", font_size=BODY_SIZE, color=TEXT_MUTED).next_to(title, DOWN)
         
         self.play(FadeIn(title, shift=UP*0.2), FadeIn(subtitle, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Deklaratives Paradigma** – Benutzer definiert Soll-Zustand in YAML. Controller (z.B. Deployment-Controller) gleichen Ist-Zustand an. Keine imperativen Schritte nötig.")
         self.play(FadeOut(subtitle), title.animate.to_edge(UP, buff=0.4))
 
         # ==========================================
@@ -42,7 +42,7 @@ class StandardResources(Slide):
         self.play(FadeIn(ctrl, shift=RIGHT*0.2))
         self.play(GrowArrow(arrow2))
         self.play(FadeIn(cluster, shift=RIGHT*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Namespaces** – virtuelle Cluster innerhalb eines physischen Clusters. Bieten Isolation und Organisation. Ressourcen innerhalb eines Namespace sind per DNS erreichbar: `service.namespace.svc.cluster.local`.")
         self.play(FadeOut(flow_group))
 
         # ==========================================
@@ -84,7 +84,7 @@ class StandardResources(Slide):
 
         ns_note = Text("Virtuelle Cluster zur Isolation & Organisation", font_size=18, color=TEXT_MUTED).next_to(ns_db, DOWN, buff=0.4)
         self.play(FadeIn(ns_note, shift=UP*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Pod** – kleinste Einheit, ein oder mehrere Container. Teilen sich Network-Namespace (gleiche IP) und Storage. Meist 1 Container pro Pod (Sidecar-Container sind möglich).")
 
         self.play(FadeOut(ns_default), FadeOut(ns_db), FadeOut(ns_web),
                   FadeOut(l_default), FadeOut(l_db), FadeOut(l_web),
@@ -115,7 +115,7 @@ class StandardResources(Slide):
         self.play(FadeIn(boundary), Write(pod_label))
         self.play(FadeIn(c1_group, shift=UP*0.1), FadeIn(c2_group, shift=UP*0.1))
         self.play(FadeIn(pod_code, shift=LEFT*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Deployment** – deklariert Soll-Zustand für Pods (replicas). Erzeugt ReplicaSet, das die Pods überwacht. Rolling Updates mit null Ausfallzeit.")
 
         self.play(FadeOut(pod_visual), FadeOut(pod_code))
         
@@ -143,7 +143,7 @@ class StandardResources(Slide):
         self.play(FadeIn(dep_boundary), Write(dep_label))
         self.play(FadeIn(dp1, shift=UP*0.1), FadeIn(dp2, shift=UP*0.1), FadeIn(dp3, shift=UP*0.1))
         self.play(FadeIn(dep_code, shift=LEFT*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Service** – stabiler Endpunkt für eine Gruppe von Pods. Pods sind ephemer (wechselnde IPs), Services bieten eine feste IP und DNS. Typen: ClusterIP, NodePort, LoadBalancer.")
 
         self.play(FadeOut(dep_visual), FadeOut(dep_code))
 
@@ -181,7 +181,7 @@ class StandardResources(Slide):
             GrowArrow(a1), GrowArrow(a2), GrowArrow(a3)
         )
         self.play(FadeIn(svc_code, shift=LEFT*0.2))
-        self.next_slide()
+        self.next_slide(notes="**Internal DNS** – CoreDNS ist der Cluster-DNS. Namensauflösung: `servicename.namespace.svc.cluster.local`. Pod → Service → Cluster-IP. Der `cluster.local`-Suffix ist konfigurierbar.")
 
         self.play(FadeOut(svc_visual), FadeOut(svc_code))
 
@@ -202,7 +202,7 @@ class StandardResources(Slide):
         ).move_to(UP * 1.8)
 
         self.play(FadeIn(dns_name, shift=DOWN*0.2))
-        self.next_slide()
+        self.next_slide(notes="**CoreDNS** – Kubernetes-interner DNS-Server, läuft als Pod im kube-system Namespace. Jeder neue Service erhält automatisch einen DNS-Eintrag.")
 
         pod_dns = create_modern_box("Pod", width=2.0, height=1.0, color=NODE_GREEN).shift(LEFT * 4.5 + DOWN * 1.0)
         coredns = create_modern_box("CoreDNS", width=2.0, height=1.0, color=K8S_BLUE).shift(DOWN * 1.0)
@@ -217,7 +217,7 @@ class StandardResources(Slide):
         self.play(FadeIn(coredns, shift=UP*0.3))
         self.play(GrowArrow(arrow1_dns), FadeIn(label1_dns))
         self.play(GrowArrow(arrow2_dns), FadeIn(label2_dns))
-        self.next_slide()
+        self.next_slide(notes="**CRDs** (Custom Resource Definitions) – erweitern die K8s-API um benutzerdefinierte Ressourcen. **Operator** – ein Controller, der die CRD-Logik implementiert, z.B. CloudNativePG (PostgreSQL).")
 
         self.play(FadeOut(dns_name),
                   FadeOut(pod_dns), FadeOut(coredns), FadeOut(svc_dns),
@@ -253,7 +253,7 @@ class StandardResources(Slide):
         self.play(Write(plus1), FadeIn(crd_piece, shift=RIGHT*0.2))
         self.play(Write(plus2), FadeIn(op_group, shift=RIGHT*0.2))
         self.play(Write(eq), FadeIn(ext, shift=RIGHT*0.2))
-        self.next_slide()
+        self.next_slide(notes="**CloudNativePG** (cnpg) – PostgreSQL-Operator für K8s. Definiert Datenbank-Cluster als CRD. Übernimmt Backup, Failover, Replikation automatisch.")
 
         self.play(FadeOut(puzzle_group))
         
@@ -265,8 +265,8 @@ class StandardResources(Slide):
 
         cnpg_code = Code(code_file="kubernetes/cnpg-cluster-simple.yaml", language="yaml", background="window").scale(0.75)
         self.play(FadeIn(cnpg_code, shift=UP*0.2))
-            
-        self.next_slide()
+
+        self.next_slide(notes="**Weitere Resources** – ConfigMap/Secret (Konfiguration), Ingress (L7-Routing), PVC (persistenter Speicher), DaemonSet (ein Pod pro Node), StatefulSet (stabile Identitäten), NetworkPolicy (Firewall).")
 
         # ==========================================
         # SLIDE 10: Weitere wichtige Resources
@@ -295,7 +295,7 @@ class StandardResources(Slide):
             cards.add(VGroup(card, t_card, d_card))
 
         self.play(LaggedStart(*[FadeIn(g, shift=UP*0.3) for g in cards], lag_ratio=0.15))
-        self.next_slide()
+        self.next_slide(notes="**Fazit** – CRDs machen Kubernetes grenzenlos erweiterbar. Fast jede Stateful-Anwendung (DB, Queue, Monitoring) hat inzwischen einen Operator.")
 
         self.play(FadeOut(cards))
 
