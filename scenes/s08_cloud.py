@@ -43,6 +43,7 @@ class CloudHosting(Slide):
             )
         )
         self.next_slide(notes="**On-Premise** – kubeadm (offizielles Setup-Tool), K3s (leichtgewichtig, für Edge/IoT), **RKE2** (Rancher Kubernetes Engine 2, gehärtet für Security), Talos (API-getrieben, minimales OS für K8s). Wahl hängt von Sicherheit & Ressourcen ab.")
+        self.play(FadeOut(providers))
 
         # ==========================================
         # SLIDE 3: Bare Metal / On-Premise
@@ -69,6 +70,7 @@ class CloudHosting(Slide):
             )
         )
         self.next_slide(notes="**LoadBalancer Service** – YAML-Definition eines Service vom Typ LoadBalancer. Port 80 wird exponiert. Der Cloud-Provider provisioniert automatisch einen externen Load Balancer (ALB, NLB, GLB).")
+        self.play(FadeOut(bare_metal_group))
 
         # ==========================================
         # SLIDE 4: Load Balancer (Visual + Code)
